@@ -64,5 +64,17 @@
     if(e.target&&e.target.id==='vshop-overlay'){e.target.classList.remove('-open');}
   },true);
   var n=0,iv=setInterval(function(){ if(document.body){build();clearInterval(iv);} else if(++n>80)clearInterval(iv); },200);
+  // When embedded in the Shopify store, auto-enter so the page is scrollable
+  // immediately (the splash is the only thing that unlocks Lenis scroll).
+  if(window.self!==window.top){
+    setTimeout(function(){
+      var ae=0,aiv=setInterval(function(){
+        if(!document.body.classList.contains('page-transitioning')){clearInterval(aiv);return;}
+        var btn=[].slice.call(document.querySelectorAll('span,div,button,a')).filter(function(e){return /CONTINUE WITHOUT SOUND/i.test(e.textContent||'')&&e.children.length===0;})[0];
+        if(btn){btn.click();}
+        if(++ae>40)clearInterval(aiv);
+      },250);
+    },1200);
+  }
 })();
 </script><!--VSHOP_END--></body></html>
