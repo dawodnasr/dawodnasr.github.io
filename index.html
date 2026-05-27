@@ -96,16 +96,12 @@
     /* insert OUTSIDE the Vue-managed .the-footer subtree (as a sibling after it) */
     footer.parentNode.insertBefore(f, footer.nextSibling);
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildFooter();fixLinks();} if(document.getElementById('vshop-footer')||++n>120)clearInterval(iv); },200);
-  // Lightweight, SELF-DISCONNECTING observer: the experience mutates the DOM every
-  // frame, so a permanent subtree observer would tank performance and feel like a
-  // scroll freeze. Run a few times to (re)build footer/links, then stop. The
-  // capture-phase click handler above permanently guards Etsy links regardless.
-  try{
-    var moRuns=0,mo=new MutationObserver(function(){ buildFooter(); fixLinks(); if(document.getElementById('vshop-footer') && ++moRuns>4){ mo.disconnect(); } });
-    mo.observe(document.documentElement,{childList:true,subtree:true});
-    setTimeout(function(){ try{mo.disconnect();}catch(e){} },15000);
-  }catch(e){}
+  var n=0,iv=setInterval(function(){ if(document.body){build();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
+  // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
+  // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
+  // cost of a subtree MutationObserver (which froze scrolling before).
+  setInterval(function(){ buildFooter(); fixLinks(); }, 1200);
   // When embedded in the Shopify store, auto-enter so the page is scrollable
   // immediately (the splash is the only thing that unlocks Lenis scroll).
   if(window.self!==window.top){
