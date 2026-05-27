@@ -23,6 +23,16 @@
 #vshop-overlay a{color:#C6E4DF;text-decoration:none;font-size:clamp(20px,3.4vw,38px);line-height:1.15;text-transform:uppercase;letter-spacing:1px;transition:color .2s ease}
 #vshop-overlay a:hover{color:#EFB10A}
 #vshop-close{position:absolute;top:22px;right:28px;width:40px;height:40px;color:#EFB10A;background:none;border:0;cursor:pointer;font-size:30px;line-height:1}
+/* ---- store footer block inside the experience footer ---- */
+.the-footer__socials{display:none!important}
+.the-footer__copyright-top a[href*="iubenda"],.the-footer__copyright-top .btn[href*="iubenda"]{display:none!important}
+#vshop-footer{display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,64px);justify-content:center;align-items:flex-start;padding:36px 24px 8px;font-family:var(--font-mono,"IBM Plex Mono",monospace)}
+#vshop-footer .vsf-col{min-width:150px}
+#vshop-footer h4{color:#EFB10A;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin:0 0 14px;font-weight:500}
+#vshop-footer a{display:block;color:#C6E4DF;text-decoration:none;font-size:14px;line-height:2;opacity:.92}
+#vshop-footer a:hover{color:#EFB10A;opacity:1}
+#vshop-footer .vsf-pay{display:flex;flex-wrap:wrap;gap:6px;max-width:230px}
+#vshop-footer .vsf-pay span{font-size:11px;color:#143A3B;background:#C6E4DF;border-radius:4px;padding:3px 8px;letter-spacing:.3px}
 </style>
 <script id="vshop-nav-js">
 (function(){
@@ -63,7 +73,21 @@
     if(cl){var o2=document.getElementById('vshop-overlay');if(o2)o2.classList.remove('-open');return;}
     if(e.target&&e.target.id==='vshop-overlay'){e.target.classList.remove('-open');}
   },true);
-  var n=0,iv=setInterval(function(){ if(document.body){build();clearInterval(iv);} else if(++n>80)clearInterval(iv); },200);
+  // ---- rebuild the experience footer with real store info ----
+  var PAGES=[['Contact','/pages/contact'],['Shipping Policy','/pages/shipping-policy'],['Refund Policy','/pages/refund-policy'],['Privacy Policy','/pages/privacy-policy'],['Terms Of Service','/pages/terms-of-service']];
+  var PAY=['tabby','Apple Pay','STC Pay','PayPal','VISA','Mastercard','mada'];
+  function buildFooter(){
+    var bottom=document.querySelector('.the-footer__bottom');
+    if(!bottom||document.getElementById('vshop-footer'))return;
+    var f=document.createElement('div');f.id='vshop-footer';
+    var info='<div class="vsf-col"><h4>INFORMATION</h4>'+PAGES.map(function(p){return '<a href="'+BASE+p[1]+'" target="_top">'+p[0]+'</a>';}).join('')+'</div>';
+    var contact='<div class="vsf-col"><h4>تواصل معنا</h4><a href="mailto:virrallvirrall@gmail.com">virrallvirrall@gmail.com</a></div>';
+    var pay='<div class="vsf-col"><h4>طرق الدفع</h4><div class="vsf-pay">'+PAY.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div></div>';
+    f.innerHTML=info+contact+pay;
+    bottom.insertBefore(f, bottom.firstChild);
+  }
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildFooter();} if(document.getElementById('vshop-footer')||++n>120)clearInterval(iv); },200);
+  try{new MutationObserver(function(){buildFooter();}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}
   // When embedded in the Shopify store, auto-enter so the page is scrollable
   // immediately (the splash is the only thing that unlocks Lenis scroll).
   if(window.self!==window.top){
