@@ -65,8 +65,17 @@
       nav.classList.toggle('-show', !document.body.classList.contains('page-transitioning'));
     },300);
   }
+  // keep everything inside the store: any external Etsy/shop link -> /collections/all
+  function fixLinks(){
+    document.querySelectorAll('a[href*="etsy."]').forEach(function(a){
+      if(a.dataset.vfix)return; a.dataset.vfix='1';
+      a.setAttribute('href',BASE+'/collections/all'); a.setAttribute('target','_top'); a.removeAttribute('rel');
+    });
+  }
   // delegated handlers (robust against re-render / element identity)
   document.addEventListener('click',function(e){
+    var ek=e.target.closest&&e.target.closest('a[href*="etsy."]');
+    if(ek){e.preventDefault();e.stopPropagation();(window.top||window).location.href=BASE+'/collections/all';return;}
     var mk=e.target.closest&&e.target.closest('#vshop-menu-btn');
     if(mk){e.preventDefault();e.stopPropagation();var o=document.getElementById('vshop-overlay');if(o)o.classList.toggle('-open');return;}
     var cl=e.target.closest&&e.target.closest('#vshop-close');
@@ -87,8 +96,8 @@
     /* insert OUTSIDE the Vue-managed .the-footer subtree (as a sibling after it) */
     footer.parentNode.insertBefore(f, footer.nextSibling);
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildFooter();} if(document.getElementById('vshop-footer')||++n>120)clearInterval(iv); },200);
-  try{new MutationObserver(function(){buildFooter();}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildFooter();fixLinks();} if(document.getElementById('vshop-footer')||++n>120)clearInterval(iv); },200);
+  try{new MutationObserver(function(){buildFooter();fixLinks();}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}
   // When embedded in the Shopify store, auto-enter so the page is scrollable
   // immediately (the splash is the only thing that unlocks Lenis scroll).
   if(window.self!==window.top){
