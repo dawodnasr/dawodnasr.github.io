@@ -26,6 +26,7 @@
 </style>
 <script id="vshop-nav-js">
 (function(){
+  if(window.__vshopInit)return; window.__vshopInit=1;
   var BASE='https://www.virrall.com';
   var CATS=[['DRESSES','/collections/dresses'],['TOPS','/collections/tops'],['BOTTOMS','/collections/bottoms'],['TWO-PIECE SETS','/collections/sets'],['OUTERWEAR & KNITS','/collections/outerwear'],['JUMPSUITS & BODYSUITS','/collections/jumpsuits'],['SWIMWEAR','/collections/swimwear'],['LINGERIE & SLEEPWEAR','/collections/lingerie'],['ALL PRODUCTS','/collections/all']];
   var SVG={
@@ -40,8 +41,6 @@
     var h='<button id="vshop-close" aria-label="Close">&times;</button><span class="vshop-pretitle">VIRRALL &mdash; SHOP</span>';
     CATS.forEach(function(c){h+='<a href="'+BASE+c[1]+'" target="_top">'+c[0]+'</a>';});
     o.innerHTML=h;document.body.appendChild(o);
-    o.querySelector('#vshop-close').addEventListener('click',function(){o.classList.remove('-open');});
-    o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('-open');});
     // top nav bar
     var nav=document.createElement('div');nav.id='vshop-topnav';
     nav.innerHTML='<button id="vshop-menu-btn" aria-haspopup="true" aria-controls="vshop-overlay">MENU</button>'+
@@ -51,14 +50,19 @@
       '<a href="'+BASE+'/cart" target="_top" aria-label="Cart">'+SVG.cart+'</a>'+
       '</div>';
     document.body.appendChild(nav);
-    nav.querySelector('#vshop-menu-btn').addEventListener('click',function(e){e.preventDefault();o.classList.toggle('-open');});
-    // show the bar only after the splash is dismissed (mirror original timing)
+    // show the bar only after the splash transition is done (body loses page-transitioning)
     setInterval(function(){
-      var sp=document.querySelector('.the-splash');
-      var splashVisible=sp && sp.offsetParent!==null && parseFloat(getComputedStyle(sp).opacity||'1')>0.05;
-      nav.classList.toggle('-show', !splashVisible);
+      nav.classList.toggle('-show', !document.body.classList.contains('page-transitioning'));
     },300);
   }
+  // delegated handlers (robust against re-render / element identity)
+  document.addEventListener('click',function(e){
+    var mk=e.target.closest&&e.target.closest('#vshop-menu-btn');
+    if(mk){e.preventDefault();e.stopPropagation();var o=document.getElementById('vshop-overlay');if(o)o.classList.toggle('-open');return;}
+    var cl=e.target.closest&&e.target.closest('#vshop-close');
+    if(cl){var o2=document.getElementById('vshop-overlay');if(o2)o2.classList.remove('-open');return;}
+    if(e.target&&e.target.id==='vshop-overlay'){e.target.classList.remove('-open');}
+  },true);
   var n=0,iv=setInterval(function(){ if(document.body){build();clearInterval(iv);} else if(++n>80)clearInterval(iv); },200);
 })();
 </script><!--VSHOP_END--></body></html>
