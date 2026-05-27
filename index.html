@@ -26,7 +26,7 @@
 /* ---- store footer block inside the experience footer ---- */
 .the-footer__socials{display:none!important}
 .the-footer__copyright-top a[href*="iubenda"],.the-footer__copyright-top .btn[href*="iubenda"]{display:none!important}
-#vshop-footer{display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,64px);justify-content:center;align-items:flex-start;padding:36px 24px 8px;font-family:var(--font-mono,"IBM Plex Mono",monospace)}
+#vshop-footer{display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,64px);justify-content:center;align-items:flex-start;padding:48px 24px 56px;background:#143A3B;font-family:var(--font-mono,"IBM Plex Mono",monospace)}
 #vshop-footer .vsf-col{min-width:150px}
 #vshop-footer h4{color:#EFB10A;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin:0 0 14px;font-weight:500}
 #vshop-footer a{display:block;color:#C6E4DF;text-decoration:none;font-size:14px;line-height:2;opacity:.92}
@@ -77,14 +77,15 @@
   var PAGES=[['Contact','/pages/contact'],['Shipping Policy','/pages/shipping-policy'],['Refund Policy','/pages/refund-policy'],['Privacy Policy','/pages/privacy-policy'],['Terms Of Service','/pages/terms-of-service']];
   var PAY=['tabby','Apple Pay','STC Pay','PayPal','VISA','Mastercard','mada'];
   function buildFooter(){
-    var bottom=document.querySelector('.the-footer__bottom');
-    if(!bottom||document.getElementById('vshop-footer'))return;
+    var footer=document.querySelector('.the-footer');
+    if(!footer||document.getElementById('vshop-footer'))return;
     var f=document.createElement('div');f.id='vshop-footer';
     var info='<div class="vsf-col"><h4>INFORMATION</h4>'+PAGES.map(function(p){return '<a href="'+BASE+p[1]+'" target="_top">'+p[0]+'</a>';}).join('')+'</div>';
     var contact='<div class="vsf-col"><h4>تواصل معنا</h4><a href="mailto:virrallvirrall@gmail.com">virrallvirrall@gmail.com</a></div>';
     var pay='<div class="vsf-col"><h4>طرق الدفع</h4><div class="vsf-pay">'+PAY.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div></div>';
     f.innerHTML=info+contact+pay;
-    bottom.insertBefore(f, bottom.firstChild);
+    /* insert OUTSIDE the Vue-managed .the-footer subtree (as a sibling after it) */
+    footer.parentNode.insertBefore(f, footer.nextSibling);
   }
   var n=0,iv=setInterval(function(){ if(document.body){build();buildFooter();} if(document.getElementById('vshop-footer')||++n>120)clearInterval(iv); },200);
   try{new MutationObserver(function(){buildFooter();}).observe(document.documentElement,{childList:true,subtree:true});}catch(e){}
