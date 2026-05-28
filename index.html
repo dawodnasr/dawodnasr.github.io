@@ -76,10 +76,15 @@
       nav.classList.toggle('-show', !document.body.classList.contains('page-transitioning'));
     },300);
   }
-  // fix the source typo "FROM FPTP TO VIRRALL" -> "FROM FIVE TO VIRRALL" (English only)
+  // fix the source typo "FROM FPTP TO VIRRALL" -> "FROM FIVE TO VIRRALL" (English only).
+  // SCOPED to the small footer subtree so the experience animations stay smooth
+  // (walking the whole document every tick was tanking scroll performance).
   function fixText(){
-    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null);
-    var n; while(n=w.nextNode()){ if(n.nodeValue && n.nodeValue.indexOf('FPTP')>=0){ n.nodeValue=n.nodeValue.replace(/FPTP/g,'FIVE'); } }
+    var roots=document.querySelectorAll('.the-footer__copyright-top,.the-footer__copyright');
+    for(var i=0;i<roots.length;i++){
+      var w=document.createTreeWalker(roots[i],NodeFilter.SHOW_TEXT,null);
+      var n; while(n=w.nextNode()){ if(n.nodeValue && n.nodeValue.indexOf('FPTP')>=0){ n.nodeValue=n.nodeValue.replace(/FPTP/g,'FIVE'); } }
+    }
   }
   // keep everything inside the store: any external Etsy/shop link -> /collections/all
   function fixLinks(){
@@ -106,8 +111,8 @@
     if(!footer||document.getElementById('vshop-footer'))return;
     var f=document.createElement('div');f.id='vshop-footer';
     var info='<div class="vsf-col"><h4>INFORMATION</h4>'+PAGES.map(function(p){return '<a href="'+BASE+p[1]+'" target="_top">'+p[0]+'</a>';}).join('')+'</div>';
-    var contact='<div class="vsf-col"><h4>تواصل معنا</h4><a href="mailto:virrallvirrall@gmail.com">virrallvirrall@gmail.com</a></div>';
-    var pay='<div class="vsf-col"><h4>طرق الدفع</h4><div class="vsf-pay">'+PAY.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div></div>';
+    var contact='<div class="vsf-col"><h4>GET IN TOUCH</h4><a href="mailto:virrallvirrall@gmail.com">virrallvirrall@gmail.com</a></div>';
+    var pay='<div class="vsf-col"><h4>PAYMENT METHODS</h4><div class="vsf-pay">'+PAY.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div></div>';
     var news='<div class="vsf-col"><h4>NEWSLETTER</h4>'+
       '<form class="vsf-news" action="'+BASE+'/contact#contact_form" method="post" target="_top">'+
       '<input type="hidden" name="form_type" value="customer"><input type="hidden" name="utf8" value="✓"><input type="hidden" name="contact[tags]" value="newsletter">'+
