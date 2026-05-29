@@ -57,6 +57,133 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
 (function(){
   if(window.__vshopInit)return; window.__vshopInit=1;
   var BASE='https://www.virrall.com';
+  var VPIECES={
+ "/chapters/01_rhythm/piece-full.jpg": {
+  "h": "floral-print-a-line-dress-waist-cinching-mid-length-dresses",
+  "t": "Floral Print A-Line Dress Waist-Cinching Mid-Length Dresses"
+ },
+ "/chapters/01_rhythm/gallery/aura-earrings.jpg": {
+  "h": "knitted-cardigans-tops-and-single-button-commuter-cardigan",
+  "t": "Knitted Cardigans Tops And Single Button Commuter Cardigan"
+ },
+ "/chapters/01_rhythm/gallery/broken-heart.jpg": {
+  "h": "solid-color-chest-wrap-pleated-suspender-dress",
+  "t": "Solid Color Chest Wrap Pleated Suspender Dress"
+ },
+ "/chapters/01_rhythm/gallery/chains-piece.jpg": {
+  "h": "hollow-out-cropped-knit-vacation-top",
+  "t": "Hollow Out Cropped Knit Vacation Top"
+ },
+ "/chapters/01_rhythm/gallery/philosopher.jpg": {
+  "h": "dio2-6-d25268_021-id-60629",
+  "t": "Fierce Stroke Halter Midi Dress"
+ },
+ "/chapters/01_rhythm/gallery/selene-piece.jpg": {
+  "h": "and-french-vintage-velvet-dress",
+  "t": "And French Vintage Velvet Dress"
+ },
+ "/chapters/01_rhythm/gallery/selenes-orbit.jpg": {
+  "h": "fashionable-wide-leg-pants-suit",
+  "t": "Fashionable Wide Leg Pants Suit"
+ },
+ "/chapters/02_pulse/piece-full.jpg": {
+  "h": "long-sleeve-button-dress",
+  "t": "Long Sleeve Button Dress"
+ },
+ "/chapters/02_pulse/gallery/chains-piece.jpg": {
+  "h": "high-grade-simple-style-lace-up-solid-color-dress",
+  "t": "High-grade Simple Style Lace-up Solid Color Dress"
+ },
+ "/chapters/02_pulse/gallery/column-piece.jpg": {
+  "h": "v-neck-half-sleeved-dress-with-pockets-ethnic-print-dresses",
+  "t": "V-neck Half-sleeved Dress With Pockets Ethnic Print Dresses"
+ },
+ "/chapters/02_pulse/gallery/delta.jpg": {
+  "h": "dress-sleeveless-mid-length-pleated-long-layered",
+  "t": "Dress Sleeveless Mid-length Pleated Long Layered"
+ },
+ "/chapters/02_pulse/gallery/lava-piece.jpg": {
+  "h": "european-and-american-style-backless-dress",
+  "t": "European And American Style Backless Dress"
+ },
+ "/chapters/02_pulse/gallery/morph-piece.jpg": {
+  "h": "one-shoulder-fishtail-sequin-slim-fit-evening-dress",
+  "t": "One Shoulder Fishtail Sequin Slim Fit Evening Dress"
+ },
+ "/chapters/03_whisper/piece-full.jpg": {
+  "h": "bikini-strap-blouse-hollow-out-dress",
+  "t": "Bikini Strap Blouse Hollow-out Dress"
+ },
+ "/chapters/03_whisper/gallery/axis-piece.jpg": {
+  "h": "two-piece-one-piece-swimsuit-conservative-hollow-out-tied",
+  "t": "Two-piece One Piece Swimsuit Conservative Hollow Out Tied"
+ },
+ "/chapters/03_whisper/gallery/dangle-earrings.jpg": {
+  "h": "dio2-6-j14132_029-id-60675",
+  "t": "Bikini Top And Mesh Wide Pant Jumpsuit"
+ },
+ "/chapters/03_whisper/gallery/layer-piece.jpg": {
+  "h": "personality-one-piece-swimsuit",
+  "t": "Personality One-piece Swimsuit"
+ },
+ "/chapters/03_whisper/gallery/libra.jpg": {
+  "h": "v-neck-gradient-one-piece-swimsuit",
+  "t": "V-Neck Gradient One-Piece Swimsuit"
+ },
+ "/chapters/03_whisper/gallery/petal-earrings.jpg": {
+  "h": "color-block-adjustable-strap-one-piece-swimsuit",
+  "t": "Color Block Adjustable Strap One-Piece Swimsuit"
+ },
+ "/chapters/04_resonance/piece-full.jpg": {
+  "h": "coat-loose-plaid-fur-cardigan-sweater",
+  "t": "Coat Loose Plaid Fur Cardigan Sweater"
+ },
+ "/chapters/04_resonance/gallery/axis-piece.jpg": {
+  "h": "apricot-woven-thin-blazer",
+  "t": "Apricot Woven Thin Blazer"
+ },
+ "/chapters/04_resonance/gallery/chains-piece.jpg": {
+  "h": "solid-knitted-cardigan-with-asymmetrical-scarf-design-short",
+  "t": "Solid Knitted Cardigan With Asymmetrical Scarf Design Short"
+ },
+ "/chapters/04_resonance/gallery/raw-piece.jpg": {
+  "h": "blazer-jacket-long-sleeve-work-0ffice-lapel",
+  "t": "Blazer Jacket Long Sleeve Work 0ffice Lapel"
+ },
+ "/chapters/04_resonance/gallery/rock-piece.jpg": {
+  "h": "woolen-coat-slim-fit-cardigan-large-long-sleeve-single",
+  "t": "Woolen Coat Slim Fit Cardigan Large Long Sleeve Single"
+ },
+ "/chapters/04_resonance/gallery/rude.jpg": {
+  "h": "slim-trench-coat-plus-size-mid-length",
+  "t": "Slim Trench Coat Plus Size Mid-length"
+ },
+ "/chapters/05_subnoise/piece-full.jpg": {
+  "h": "loose-knitted-sweater-vest",
+  "t": "Loose Knitted Sweater Vest"
+ },
+ "/chapters/05_subnoise/gallery/cage-ear-cuff.jpg": {
+  "h": "french-top-high-grade-cardigan-blouse-shirt",
+  "t": "French Top High-grade Cardigan Blouse Shirt"
+ },
+ "/chapters/05_subnoise/gallery/chains-piece.jpg": {
+  "h": "long-knitted-sweater-cardigan-outer-coat",
+  "t": "Long Knitted Sweater Cardigan Outer Coat"
+ },
+ "/chapters/05_subnoise/gallery/coral.jpg": {
+  "h": "retro-a-line-lantern-sleeve-mid-length-trench-coat",
+  "t": "Retro A- Line Lantern Sleeve Mid-length Trench Coat"
+ },
+ "/chapters/05_subnoise/gallery/island-earrings.jpg": {
+  "h": "french-knitted-bottoming-sweater",
+  "t": "French Knitted Bottoming Sweater"
+ },
+ "/chapters/05_subnoise/gallery/undertow-piece.jpg": {
+  "h": "hollow-out-short-sleeve-knit-cardigan-vacation-cover-up",
+  "t": "Hollow Out Short Sleeve Knit Cardigan Vacation Cover-Up"
+ }
+};  // {"/chapters/..jpg":{"h":handle,"t":title}} -> link pieces to products
+  function vpKey(s){ if(!s)return null; var m=s.match(/\/chapters\/[^?"']+/); return m?m[0]:null; }
   var CATS=[['SPRING','/collections/spring'],['SUMMER','/collections/summer'],['AUTUMN','/collections/autumn'],['WINTER','/collections/winter'],['ALL PRODUCTS','/collections/all']];
   var SVG={
     search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
@@ -106,6 +233,9 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
   // delegated handlers (robust against re-render / element identity)
   var CH_SEASON={pulse:'spring',whisper:'summer',resonance:'autumn','sub-noise':'winter'};
   document.addEventListener('click',function(e){
+    // a COLLECTION piece linked to a real product -> open that product (wins over all)
+    var vp=e.target.closest&&e.target.closest('[data-vprod]');
+    if(vp){ e.preventDefault(); e.stopPropagation(); (window.top||window).location.href=vp.getAttribute('data-vprod'); return; }
     // chapter imagery -> that season's collection
     var sec=e.target.closest&&e.target.closest('#pulse,#whisper,#resonance,#sub-noise');
     if(sec){
@@ -230,20 +360,26 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
   // NOTE: THE COLLECTION pieces (gallery + signature) stay as real product IMAGES in
   // every chapter. Videos are used ONLY on chapter covers + the hero (per user).
   // rename signature-piece labels to the season's COLLECTION name + point buy buttons there
-  function renamePieces(){
+  function pieceURL(el, cc){
+    var img=el.querySelector('img'); var rec=img?VPIECES[vpKey(img.getAttribute('src')||img.currentSrc||'')]:null;
+    return rec?BASE+'/products/'+rec.h:BASE+cc[1];  // real product, else season collection
+  }
+  function fixPieces(){
     document.querySelectorAll('.tale-product-gallery__item').forEach(function(li){
       var season=seasonOf(li); if(!season)return; var cc=COLL[season];
       var h3=li.querySelector('h3'); if(h3&&h3.textContent.trim()!==cc[0])h3.textContent=cc[0];
+      var url=pieceURL(li,cc); li.setAttribute('data-vprod',url); li.style.cursor='pointer';
       var btn=li.querySelector('.tale-product-gallery__shop-btn');
-      if(btn){ if(btn.getAttribute('href')!==BASE+cc[1])btn.setAttribute('href',BASE+cc[1]); btn.setAttribute('target','_top'); btn.removeAttribute('rel');
+      if(btn){ if(btn.getAttribute('href')!==url)btn.setAttribute('href',url); btn.setAttribute('target','_top'); btn.removeAttribute('rel');
         var bt=btn.querySelector('.btn__text'); if(bt&&bt.textContent.trim()!=='SHOP')bt.textContent='SHOP'; }
     });
     document.querySelectorAll('.tale-product-overview').forEach(function(sec){
       var season=seasonOf(sec); if(!season)return; var cc=COLL[season];
       var t=sec.querySelector('.tale-product-overview__title'); if(t&&t.textContent.trim()!==cc[0])t.textContent=cc[0];
+      var url=pieceURL(sec,cc); var iw=sec.querySelector('.tale-product-overview__image-wr'); if(iw){iw.setAttribute('data-vprod',url);iw.style.cursor='pointer';}
       var btn=sec.querySelector('.tale-product-overview__request');
-      if(btn){ if(btn.getAttribute('href')!==BASE+cc[1])btn.setAttribute('href',BASE+cc[1]); btn.setAttribute('target','_top'); btn.removeAttribute('rel');
-        var bt=btn.querySelector('.btn__text'); if(bt&&bt.textContent.trim()!=='SHOP '+cc[0])bt.textContent='SHOP '+cc[0]; }
+      if(btn){ if(btn.getAttribute('href')!==url)btn.setAttribute('href',url); btn.setAttribute('target','_top'); btn.removeAttribute('rel');
+        var bt=btn.querySelector('.btn__text'); if(bt&&bt.textContent.trim()!=='SHOP NOW')bt.textContent='SHOP NOW'; }
     });
   }
   // ---- relabel "The House" -> "Virrall Fashion" + brand marketing copy ----
@@ -266,12 +402,12 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
       }
     });
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();renamePieces();renameHouse();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();fixPieces();renameHouse();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
   // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
   // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
   // cost of a subtree MutationObserver (which froze scrolling before).
-  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); renamePieces(); renameHouse(); }, 1200);
+  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); fixPieces(); renameHouse(); }, 1200);
   // The splash is hidden via CSS; auto-click its sound-disable button ASAP so the
   // experience initializes and Lenis scroll unlocks (the splash is the only thing
   // that unlocks scroll). Runs always (embedded or direct), fast poll, no delay.
