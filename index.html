@@ -200,15 +200,16 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
   function buildCoverVideos(){
     var pics=document.querySelectorAll('.tale-cover__bg');
     for(var i=0;i<pics.length;i++){
-      var pic=pics[i]; if(pic.dataset.vvid)continue;
+      var pic=pics[i];
+      var sec=pic.closest('.tale-cover')||pic.parentElement; if(!sec)continue;
+      // guard on ACTUAL presence (Vue may prune a child added pre-hydration; re-add it)
+      if(sec.querySelector('.vshop-cover-vid'))continue;
       var img=pic.querySelector('img'); if(!img)continue;
       var src=img.currentSrc||img.getAttribute('src')||''; if(!src)continue;
       var key=null,isHouse=false;
       if(src.indexOf('01_rhythm')>=0){isHouse=true;}
       else{ for(var k in COVER_VID){ if(src.indexOf(k)>=0){key=k;break;} } }
       if(!isHouse&&!key)continue;
-      pic.dataset.vvid='1';
-      var sec=pic.closest('.tale-cover')||pic.parentElement; if(!sec)continue;
       var v=document.createElement('video');
       v.className='vshop-cover-vid';
       v.muted=true;v.defaultMuted=true;v.playsInline=true;v.preload='metadata';v.poster=src;
