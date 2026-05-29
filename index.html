@@ -153,19 +153,26 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
   // ---- hero background VIDEO: swaps per hovered season word ----
   // The House (default) cycles through ALL videos; each season word shows its own.
   var HERO_HOUSE=['/videos/general.mp4','/videos/spring.mp4','/videos/summer.mp4','/videos/summer2.mp4','/videos/autumn.mp4','/videos/winter.mp4'];
-  var HERO_SEASON={spring:'/videos/spring.mp4',summer:'/videos/summer.mp4',autumn:'/videos/autumn.mp4',winter:'/videos/winter.mp4'};
+  // [video, poster(=that season's cover image, shown instantly while the clip buffers)]
+  var HERO_SEASON={
+    spring:['/videos/spring.mp4','/chapters/02_pulse/cover-desktop.jpg'],
+    summer:['/videos/summer.mp4','/chapters/03_whisper/cover-desktop.jpg'],
+    autumn:['/videos/autumn.mp4','/chapters/04_resonance/cover-desktop.jpg'],
+    winter:['/videos/winter.mp4','/chapters/05_subnoise/cover-desktop.jpg']
+  };
+  var HOUSE_POSTER='/chapters/01_rhythm/cover-desktop.jpg';
   function buildHeroVideo(){
     var bg=document.querySelector('.hero__bg');
     if(!bg||document.getElementById('vshop-hero-vid'))return;
     var v=document.createElement('video');
     v.id='vshop-hero-vid';
-    v.muted=true;v.defaultMuted=true;v.autoplay=true;v.playsInline=true;v.preload='auto';
+    v.muted=true;v.defaultMuted=true;v.autoplay=true;v.playsInline=true;v.preload='auto';v.poster=HOUSE_POSTER;
     v.setAttribute('muted','');v.setAttribute('autoplay','');v.setAttribute('playsinline','');
     bg.appendChild(v);
     var pi=0,mode='house';
     function play(){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
-    function house(){ mode='house'; v.loop=false; v.src=HERO_HOUSE[pi%HERO_HOUSE.length]; v.load(); play(); }
-    function season(src){ mode='single'; v.loop=true; if(v.getAttribute('src')!==src){v.src=src;v.load();} play(); }
+    function house(){ mode='house'; v.loop=false; v.poster=HOUSE_POSTER; v.src=HERO_HOUSE[pi%HERO_HOUSE.length]; v.load(); play(); }
+    function season(a){ mode='single'; v.loop=true; v.poster=a[1]; if(v.getAttribute('src')!==a[0]){v.src=a[0];v.load();} play(); }
     v.addEventListener('ended',function(){ if(mode==='house'){ pi=(pi+1)%HERO_HOUSE.length; v.src=HERO_HOUSE[pi]; v.load(); play(); } });
     house();
     var ul=document.querySelector('.hero__index');
@@ -181,6 +188,8 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
       });
       ul.addEventListener('mouseleave',function(){ pi=0; house(); });
     }
+    // warm the HTTP cache for the 4 season clips so hover swaps are near-instant
+    setTimeout(function(){ ['spring','summer','autumn','winter'].forEach(function(k,i){ setTimeout(function(){ try{fetch(HERO_SEASON[k][0],{mode:'no-cors'});}catch(e){} }, i*1800); }); }, 3500);
   }
   var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
