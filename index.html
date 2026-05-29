@@ -103,6 +103,12 @@
       var S=CH_SEASON[sec.id];
       if(media&&S){e.preventDefault();e.stopPropagation();(window.top||window).location.href=BASE+'/collections/'+S;return;}
     }
+    // the visuals are a WebGL <canvas> overlay -> map a canvas click to the season chapter currently in view
+    if(e.target && e.target.tagName==='CANVAS'){
+      var cy=window.innerHeight/2, S2=null;
+      for(var sl in CH_SEASON){ var el=document.getElementById(sl); if(el){ var r=el.getBoundingClientRect(); if(r.top<=cy && r.bottom>=cy){ S2=CH_SEASON[sl]; break; } } }
+      if(S2){ e.preventDefault(); e.stopPropagation(); (window.top||window).location.href=BASE+'/collections/'+S2; return; }
+    }
     var ek=e.target.closest&&e.target.closest('a[href*="etsy."]');
     if(ek){e.preventDefault();e.stopPropagation();(window.top||window).location.href=BASE+'/collections/all';return;}
     var mk=e.target.closest&&e.target.closest('#vshop-menu-btn');
