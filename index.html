@@ -227,14 +227,8 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
       attachVid(sec,season,src);
     });
   }
-  function buildPieceVideos(){
-    document.querySelectorAll('.tale-product-gallery__plane,.tale-product-overview__image-wr').forEach(function(c){
-      if(c.querySelector('.vshop-cover-vid'))return;
-      var img=c.querySelector('img'); var src=img?(img.currentSrc||img.getAttribute('src')||''):'';
-      var season=seasonFromSrc(src)||seasonFromSection(c); if(!season)return;
-      attachVid(c,season,src);
-    });
-  }
+  // NOTE: THE COLLECTION pieces (gallery + signature) stay as real product IMAGES in
+  // every chapter. Videos are used ONLY on chapter covers + the hero (per user).
   // rename signature-piece labels to the season's COLLECTION name + point buy buttons there
   function renamePieces(){
     document.querySelectorAll('.tale-product-gallery__item').forEach(function(li){
@@ -272,12 +266,12 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
       }
     });
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();buildPieceVideos();renamePieces();renameHouse();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();renamePieces();renameHouse();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
   // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
   // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
   // cost of a subtree MutationObserver (which froze scrolling before).
-  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); buildPieceVideos(); renamePieces(); renameHouse(); }, 1200);
+  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); renamePieces(); renameHouse(); }, 1200);
   // The splash is hidden via CSS; auto-click its sound-disable button ASAP so the
   // experience initializes and Lenis scroll unlocks (the splash is the only thing
   // that unlocks scroll). Runs always (embedded or direct), fast poll, no delay.
