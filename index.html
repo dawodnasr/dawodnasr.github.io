@@ -252,12 +252,32 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
         var bt=btn.querySelector('.btn__text'); if(bt&&bt.textContent.trim()!=='SHOP '+cc[0])bt.textContent='SHOP '+cc[0]; }
     });
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();buildPieceVideos();renamePieces();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  // ---- relabel "The House" -> "Virrall Fashion" + brand marketing copy ----
+  var HOUSE_COPY='Trend-led clothing for every season — the newest, the finest, the most beautiful edit of Spring, Summer, Autumn & Winter, curated in one house.';
+  function renameHouse(){
+    document.querySelectorAll('.hero__index a .btn__text').forEach(function(t){
+      if(t.textContent.trim()==='The House')t.textContent='Virrall Fashion';
+    });
+    document.querySelectorAll('.tale-cover__name').forEach(function(p){
+      var x=p.textContent.trim(); if(x==='[The House]'||x==='The House')p.textContent=' [Virrall Fashion] ';
+    });
+    document.querySelectorAll('.chapters-menu__label,.chapters-progress__label').forEach(function(l){
+      var x=(l.textContent||'').trim(); if(x==='The House')l.textContent='Virrall Fashion'; else if(x==='THE HOUSE')l.textContent='VIRRALL FASHION';
+    });
+    document.querySelectorAll('.tale-head__title').forEach(function(h){
+      if(h.textContent.trim()==='The House'){
+        h.textContent='VIRRALL FASHION';
+        var ab=h.parentElement&&h.parentElement.querySelector('.tale-head__abstract');
+        if(ab && ab.textContent.indexOf('every season')<0) ab.textContent=HOUSE_COPY;
+      }
+    });
+  }
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();buildPieceVideos();renamePieces();renameHouse();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
   // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
   // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
   // cost of a subtree MutationObserver (which froze scrolling before).
-  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); buildPieceVideos(); renamePieces(); }, 1200);
+  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); buildPieceVideos(); renamePieces(); renameHouse(); }, 1200);
   // The splash is hidden via CSS; auto-click its sound-disable button ASAP so the
   // experience initializes and Lenis scroll unlocks (the splash is the only thing
   // that unlocks scroll). Runs always (embedded or direct), fast poll, no delay.
