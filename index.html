@@ -103,10 +103,12 @@
       var S=CH_SEASON[sec.id];
       if(media&&S){e.preventDefault();e.stopPropagation();(window.top||window).location.href=BASE+'/collections/'+S;return;}
     }
-    // the visuals are a WebGL <canvas> overlay -> map a canvas click to the season chapter currently in view
+    // the visuals are a WebGL <canvas> overlay -> use the experience's OWN active-chapter
+    // label (curtains.js transforms make geometry unreliable) to pick the season.
     if(e.target && e.target.tagName==='CANVAS'){
-      var cy=window.innerHeight/2, S2=null;
-      for(var sl in CH_SEASON){ var el=document.getElementById(sl); if(el){ var r=el.getBoundingClientRect(); if(r.top<=cy && r.bottom>=cy){ S2=CH_SEASON[sl]; break; } } }
+      var lab=document.querySelector('.chapters-menu__label');
+      var t=((lab&&lab.textContent)||'').toUpperCase();
+      var S2=t.indexOf('SPRING')>=0?'spring':t.indexOf('SUMMER')>=0?'summer':t.indexOf('AUTUMN')>=0?'autumn':t.indexOf('WINTER')>=0?'winter':null;
       if(S2){ e.preventDefault(); e.stopPropagation(); (window.top||window).location.href=BASE+'/collections/'+S2; return; }
     }
     var ek=e.target.closest&&e.target.closest('a[href*="etsy."]');
