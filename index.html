@@ -94,7 +94,15 @@
     });
   }
   // delegated handlers (robust against re-render / element identity)
+  var CH_SEASON={pulse:'spring',whisper:'summer',resonance:'autumn','sub-noise':'winter'};
   document.addEventListener('click',function(e){
+    // chapter imagery -> that season's collection
+    var sec=e.target.closest&&e.target.closest('#pulse,#whisper,#resonance,#sub-noise');
+    if(sec){
+      var media=e.target.closest('img,picture,[class*="cover"],[class*="lookbook"],[class*="gallery"],[class*="tale-product"]');
+      var S=CH_SEASON[sec.id];
+      if(media&&S){e.preventDefault();e.stopPropagation();(window.top||window).location.href=BASE+'/collections/'+S;return;}
+    }
     var ek=e.target.closest&&e.target.closest('a[href*="etsy."]');
     if(ek){e.preventDefault();e.stopPropagation();(window.top||window).location.href=BASE+'/collections/all';return;}
     var mk=e.target.closest&&e.target.closest('#vshop-menu-btn');
