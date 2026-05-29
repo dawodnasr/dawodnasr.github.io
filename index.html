@@ -17,6 +17,8 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
 .hero__bg{overflow:hidden!important}
 .hero__bg .responsive-video{display:none!important}
 #vshop-hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#143A3B}
+/* per-chapter cover videos: above the cover image (z auto), below the season name (z:1) */
+.vshop-cover-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#143A3B}
 .the-header__maker,.the-header__contacts{opacity:0!important;pointer-events:none!important}
 #vshop-topnav{position:fixed;top:18px;left:0;right:0;z-index:2147483630;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3.2vw,40px);pointer-events:none;font-family:var(--font-mono,monospace);opacity:0;transition:opacity .5s ease;mix-blend-mode:difference;color:#fff}
 #vshop-topnav.-show{opacity:1}
@@ -191,12 +193,40 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
     // warm the HTTP cache for the 4 season clips so hover swaps are near-instant
     setTimeout(function(){ ['spring','summer','autumn','winter'].forEach(function(k,i){ setTimeout(function(){ try{fetch(HERO_SEASON[k][0],{mode:'no-cors'});}catch(e){} }, i*1800); }); }, 3500);
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  // ---- per-chapter cover VIDEO: each season chapter's big cover plays its video ----
+  // The House (01_rhythm) cycles ALL videos; each season chapter plays its own (looped).
+  var COVER_VID={'02_pulse':'/videos/spring.mp4','03_whisper':'/videos/summer.mp4','04_resonance':'/videos/autumn.mp4','05_subnoise':'/videos/winter.mp4'};
+  var _covIO=window.IntersectionObserver?new IntersectionObserver(function(es){es.forEach(function(en){var v=en.target;if(en.isIntersecting){var pp=v.play();if(pp&&pp.catch)pp.catch(function(){});}else{v.pause();}});},{threshold:0.12}):null;
+  function buildCoverVideos(){
+    var pics=document.querySelectorAll('.tale-cover__bg');
+    for(var i=0;i<pics.length;i++){
+      var pic=pics[i]; if(pic.dataset.vvid)continue;
+      var img=pic.querySelector('img'); if(!img)continue;
+      var src=img.currentSrc||img.getAttribute('src')||''; if(!src)continue;
+      var key=null,isHouse=false;
+      if(src.indexOf('01_rhythm')>=0){isHouse=true;}
+      else{ for(var k in COVER_VID){ if(src.indexOf(k)>=0){key=k;break;} } }
+      if(!isHouse&&!key)continue;
+      pic.dataset.vvid='1';
+      var sec=pic.closest('.tale-cover')||pic.parentElement; if(!sec)continue;
+      var v=document.createElement('video');
+      v.className='vshop-cover-vid';
+      v.muted=true;v.defaultMuted=true;v.playsInline=true;v.preload='metadata';v.poster=src;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');
+      if(isHouse){
+        var pl=['/videos/general.mp4','/videos/spring.mp4','/videos/summer.mp4','/videos/summer2.mp4','/videos/autumn.mp4','/videos/winter.mp4'];
+        (function(vv,plist){var pj=0;vv.loop=false;vv.src=plist[0];vv.addEventListener('ended',function(){pj=(pj+1)%plist.length;vv.src=plist[pj];vv.load();var pp=vv.play();if(pp&&pp.catch)pp.catch(function(){});});})(v,pl);
+      } else { v.loop=true; v.src=COVER_VID[key]; }
+      sec.appendChild(v);
+      if(_covIO)_covIO.observe(v); else {var pp=v.play();if(pp&&pp.catch)pp.catch(function(){});}
+    }
+  }
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
   // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
   // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
   // cost of a subtree MutationObserver (which froze scrolling before).
-  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); }, 1200);
+  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); }, 1200);
   // The splash is hidden via CSS; auto-click its sound-disable button ASAP so the
   // experience initializes and Lenis scroll unlocks (the splash is the only thing
   // that unlocks scroll). Runs always (embedded or direct), fast poll, no delay.
