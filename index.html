@@ -13,6 +13,10 @@
    We still click its sound-disable button via JS to unlock Lenis scroll. */
 .the-splash{display:none!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important}
 html.page-transitioning,body.page-transitioning{overflow:auto!important}
+/* hero background video (controlled by us; original Vue video stays hidden) */
+.hero__bg{overflow:hidden!important}
+.hero__bg .responsive-video{display:none!important}
+#vshop-hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#143A3B}
 .the-header__maker,.the-header__contacts{opacity:0!important;pointer-events:none!important}
 #vshop-topnav{position:fixed;top:18px;left:0;right:0;z-index:2147483630;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3.2vw,40px);pointer-events:none;font-family:var(--font-mono,monospace);opacity:0;transition:opacity .5s ease;mix-blend-mode:difference;color:#fff}
 #vshop-topnav.-show{opacity:1}
@@ -146,12 +150,44 @@ html.page-transitioning,body.page-transitioning{overflow:auto!important}
     /* insert OUTSIDE the Vue-managed .the-footer subtree (as a sibling after it) */
     footer.parentNode.insertBefore(f, footer.nextSibling);
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  // ---- hero background VIDEO: swaps per hovered season word ----
+  // The House (default) cycles through ALL videos; each season word shows its own.
+  var HERO_HOUSE=['/videos/general.mp4','/videos/spring.mp4','/videos/summer.mp4','/videos/summer2.mp4','/videos/autumn.mp4','/videos/winter.mp4'];
+  var HERO_SEASON={spring:'/videos/spring.mp4',summer:'/videos/summer.mp4',autumn:'/videos/autumn.mp4',winter:'/videos/winter.mp4'};
+  function buildHeroVideo(){
+    var bg=document.querySelector('.hero__bg');
+    if(!bg||document.getElementById('vshop-hero-vid'))return;
+    var v=document.createElement('video');
+    v.id='vshop-hero-vid';
+    v.muted=true;v.defaultMuted=true;v.autoplay=true;v.playsInline=true;v.preload='auto';
+    v.setAttribute('muted','');v.setAttribute('autoplay','');v.setAttribute('playsinline','');
+    bg.appendChild(v);
+    var pi=0,mode='house';
+    function play(){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
+    function house(){ mode='house'; v.loop=false; v.src=HERO_HOUSE[pi%HERO_HOUSE.length]; v.load(); play(); }
+    function season(src){ mode='single'; v.loop=true; if(v.getAttribute('src')!==src){v.src=src;v.load();} play(); }
+    v.addEventListener('ended',function(){ if(mode==='house'){ pi=(pi+1)%HERO_HOUSE.length; v.src=HERO_HOUSE[pi]; v.load(); play(); } });
+    house();
+    var ul=document.querySelector('.hero__index');
+    if(ul){
+      ul.addEventListener('mouseover',function(e){
+        var a=e.target.closest&&e.target.closest('a'); if(!a)return;
+        var t=(a.textContent||'').trim().toLowerCase();
+        if(t.indexOf('spring')>=0)season(HERO_SEASON.spring);
+        else if(t.indexOf('summer')>=0)season(HERO_SEASON.summer);
+        else if(t.indexOf('autumn')>=0)season(HERO_SEASON.autumn);
+        else if(t.indexOf('winter')>=0)season(HERO_SEASON.winter);
+        else if(t.indexOf('house')>=0){ pi=0; house(); }
+      });
+      ul.addEventListener('mouseleave',function(){ pi=0; house(); });
+    }
+  }
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
   // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
   // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
   // cost of a subtree MutationObserver (which froze scrolling before).
-  setInterval(function(){ buildFooter(); fixLinks(); fixText(); }, 1200);
+  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); }, 1200);
   // The splash is hidden via CSS; auto-click its sound-disable button ASAP so the
   // experience initializes and Lenis scroll unlocks (the splash is the only thing
   // that unlocks scroll). Runs always (embedded or direct), fast poll, no delay.
