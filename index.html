@@ -19,10 +19,12 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
 #vshop-hero-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#143A3B}
 /* per-chapter cover videos: above the cover image (z auto), below the season name (z:1) */
 .vshop-cover-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#143A3B}
-/* Hide editorial overview + story (fake "100% Natural Silk" spec, beetle story) — show real products instead */
-.tale-product-overview,.tale-product-story{display:none!important}
-/* Outro -> "MORE FROM {SEASON}" product grid (3 cards, centered) */
-.tale-outro .tale-outro__inner{display:none!important}
+/* Hide editorial story (beetle) + the OLD inner of overview (100% Natural Silk + Request) + the closing outro */
+.tale-product-story,.tale-outro{display:none!important}
+.tale-product-overview .tale-product-overview__inner{display:none!important}
+/* limit each chapter's gallery to the FIRST 3 cards */
+.tale-product-gallery__item:nth-child(n+4){display:none!important}
+/* in-place product grid: lives INSIDE .tale-product-overview (replacing its inner) */
 .vshop-outro-more{padding:clamp(40px,7vw,90px) clamp(16px,4vw,40px);background:#143A3B;color:#C6E4DF;font-family:var(--font-mono,"IBM Plex Mono",monospace);position:relative;z-index:1}
 .vshop-outro-more__title{text-align:center;font-size:13px;letter-spacing:3px;color:#C6E4DF;margin:0 0 30px;text-transform:uppercase}
 .vshop-outro-more__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1000px;margin:0 auto}
@@ -485,7 +487,7 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
   function buildOutroGrid(){
     document.querySelectorAll('.homepage__tale').forEach(function(chap){
       var season=ID_SEASON[chap.id]; if(!season||!VOUTRO[season])return;
-      var outro=chap.querySelector('.tale-outro'); if(!outro)return;
+      var outro=chap.querySelector('.tale-product-overview'); if(!outro)return;
       if(outro.querySelector('.vshop-outro-more'))return;  // guard: re-add if Vue pruned
       var label=COLL[season]?COLL[season][0]:season.toUpperCase();
       var title='MORE FROM '+label;
