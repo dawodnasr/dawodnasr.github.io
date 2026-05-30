@@ -12,7 +12,7 @@
 /* remove the intro splash entirely (Welcome / ENTER THE EXPERIENCE / CONTINUE WITHOUT SOUND).
    We still click its sound-disable button via JS to unlock Lenis scroll. */
 .the-splash{display:none!important;opacity:0!important;pointer-events:none!important;visibility:hidden!important}
-html.page-transitioning,body.page-transitioning{overflow:auto!important}
+html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-lock,html.-no-scroll,body.-no-scroll{overflow:auto!important;overflow-y:auto!important;height:auto!important;position:static!important;touch-action:auto!important;-webkit-overflow-scrolling:touch!important}
 /* hero background video (controlled by us; original Vue video stays hidden) */
 .hero__bg{overflow:hidden!important}
 .hero__bg .responsive-video{display:none!important}
