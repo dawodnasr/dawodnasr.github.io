@@ -40,6 +40,10 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
 #vshop-topnav button,#vshop-topnav a{pointer-events:auto;background:none;border:0;color:inherit;cursor:pointer;font-family:inherit}
 #vshop-menu-btn{font-size:14px;letter-spacing:1px;text-transform:uppercase;line-height:20px;padding:0}
 #vshop-icons{display:flex;gap:18px;align-items:center}
+#vshop-logo{pointer-events:auto;font-family:Georgia,"Times New Roman",serif;font-size:clamp(18px,2.4vw,26px);letter-spacing:clamp(4px,.6vw,8px);line-height:1;color:inherit;white-space:nowrap;flex:0 0 auto;text-align:center}
+/* Hide the Virrall Fashion (rhythm) chapter entirely + its hero/menu entries */
+#rhythm{display:none!important}
+.hero__index li[data-vf-hide],.chapters-menu li[data-vf-hide],.chapters-progress button[data-vf-hide]{display:none!important}
 #vshop-icons a{display:inline-flex;align-items:center}
 #vshop-icons svg{width:19px;height:19px;display:block}
 #vshop-overlay{position:fixed;inset:0;z-index:2147483640;background:rgba(20,58,59,.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,1.8vh,22px);font-family:var(--font-mono,monospace);padding:40px}
@@ -529,6 +533,7 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
     // top nav bar
     var nav=document.createElement('div');nav.id='vshop-topnav';
     nav.innerHTML='<button id="vshop-menu-btn" aria-haspopup="true" aria-controls="vshop-overlay">MENU</button>'+
+      '<span id="vshop-logo">VIRRALL</span>'+
       '<div id="vshop-icons">'+
       '<a href="'+BASE+'/search" target="_top" aria-label="Search">'+SVG.search+'</a>'+
       '<a href="'+BASE+'/account" target="_top" aria-label="Account">'+SVG.user+'</a>'+
@@ -625,15 +630,13 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
     if(!bg||document.getElementById('vshop-hero-vid'))return;
     var v=document.createElement('video');
     v.id='vshop-hero-vid';
-    v.muted=true;v.defaultMuted=true;v.autoplay=true;v.playsInline=true;v.preload='auto';v.poster=HOUSE_POSTER;
+    v.muted=true;v.defaultMuted=true;v.autoplay=true;v.playsInline=true;v.preload='auto';v.poster=HERO_SEASON.spring[1];
     v.setAttribute('muted','');v.setAttribute('autoplay','');v.setAttribute('playsinline','');
     bg.appendChild(v);
-    var pi=0,mode='house';
+    var mode='single';
     function play(){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
-    function house(){ mode='house'; v.loop=false; v.poster=HOUSE_POSTER; v.src=HERO_HOUSE[pi%HERO_HOUSE.length]; v.load(); play(); }
     function season(a){ mode='single'; v.loop=true; v.poster=a[1]; if(v.getAttribute('src')!==a[0]){v.src=a[0];v.load();} play(); }
-    v.addEventListener('ended',function(){ if(mode==='house'){ pi=(pi+1)%HERO_HOUSE.length; v.src=HERO_HOUSE[pi]; v.load(); play(); } });
-    house();
+    season(HERO_SEASON.spring);
     var ul=document.querySelector('.hero__index');
     if(ul){
       ul.addEventListener('mouseover',function(e){
@@ -643,9 +646,8 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
         else if(t.indexOf('summer')>=0)season(HERO_SEASON.summer);
         else if(t.indexOf('autumn')>=0)season(HERO_SEASON.autumn);
         else if(t.indexOf('winter')>=0)season(HERO_SEASON.winter);
-        else if(t.indexOf('house')>=0){ pi=0; house(); }
       });
-      ul.addEventListener('mouseleave',function(){ pi=0; house(); });
+      ul.addEventListener('mouseleave',function(){ season(HERO_SEASON.spring); });
     }
     // warm the HTTP cache for the 4 season clips so hover swaps are near-instant
     setTimeout(function(){ ['spring','summer','autumn','winter'].forEach(function(k,i){ setTimeout(function(){ try{fetch(HERO_SEASON[k][0],{mode:'no-cors'});}catch(e){} }, i*1800); }); }, 3500);
@@ -680,8 +682,29 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
     document.querySelectorAll('.tale-cover__bg').forEach(function(pic){
       var sec=pic.closest('.tale-cover')||pic.parentElement; if(!sec||sec.querySelector('.vshop-cover-vid'))return;
       var img=pic.querySelector('img'); var src=img?(img.currentSrc||img.getAttribute('src')||''):'';
-      var season=seasonFromSrc(src); if(!season)return;
+      var season=seasonFromSrc(src); if(!season||season==='house')return;  // skip Virrall Fashion (rhythm) — hidden
       attachVid(sec,season,src);
+    });
+  }
+  // Hide Virrall Fashion (rhythm) chapter from the hero index + bottom chapters menu/progress.
+  // The chapter SECTION itself is hidden via CSS; this strips its nav entries.
+  function hideVirrallFashion(){
+    document.querySelectorAll('.hero__index a').forEach(function(a){
+      var t=(a.textContent||'').trim().toLowerCase();
+      var li=a.closest('li'); if(!li||li.dataset.vfHide)return;
+      if(t.indexOf('virrall fashion')>=0||t.indexOf('the house')>=0){ li.dataset.vfHide='1'; }
+    });
+    // bottom chapters menu list items
+    document.querySelectorAll('.chapters-menu li,.chapters-menu__item').forEach(function(li){
+      if(li.dataset.vfHide)return;
+      var t=(li.textContent||'').toLowerCase();
+      if(t.indexOf('virrall fashion')>=0||t.indexOf('the house')>=0){ li.dataset.vfHide='1'; }
+    });
+    // chapters-progress bottom bar buttons
+    document.querySelectorAll('.chapters-progress button,.chapters-progress__bar').forEach(function(b){
+      if(b.dataset.vfHide)return;
+      var t=(b.textContent||'').toLowerCase();
+      if(t.indexOf('virrall fashion')>=0||t.indexOf('the house')>=0){ b.dataset.vfHide='1'; }
     });
   }
   // NOTE: THE COLLECTION pieces (gallery + signature) stay as real product IMAGES in
@@ -712,6 +735,7 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
   // ---- Outro section -> "MORE FROM {SEASON}" 12-product grid (per chapter) ----
   function buildOutroGrid(){
     document.querySelectorAll('.homepage__tale').forEach(function(chap){
+      if(chap.id==='rhythm')return;  // Virrall Fashion chapter is hidden; don't waste a grid on it
       var season=ID_SEASON[chap.id]; if(!season||!VOUTRO[season])return;
       var outro=chap.querySelector('.tale-product-overview'); if(!outro)return;
       if(outro.querySelector('.vshop-outro-more'))return;  // guard: re-add if Vue pruned
@@ -747,12 +771,12 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
       }
     });
   }
-  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();fixPieces();renameHouse();buildOutroGrid();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
+  var n=0,iv=setInterval(function(){ if(document.body){build();buildHeroVideo();buildCoverVideos();fixPieces();renameHouse();buildOutroGrid();hideVirrallFashion();} if(document.getElementById('vshop-topnav')||++n>120)clearInterval(iv); },200);
   // Persistent LIGHT check: the experience footer (.the-footer) renders lazily when
   // you scroll near it, and Vue may re-render it. A couple of cheap querySelectors
   // every 1.2s keep the store footer + Etsy-link fixes in place WITHOUT the per-frame
   // cost of a subtree MutationObserver (which froze scrolling before).
-  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); fixPieces(); renameHouse(); buildOutroGrid(); }, 1200);
+  setInterval(function(){ buildFooter(); fixLinks(); fixText(); buildHeroVideo(); buildCoverVideos(); fixPieces(); renameHouse(); buildOutroGrid(); hideVirrallFashion(); }, 1200);
   // The splash is hidden via CSS; auto-click its sound-disable button ASAP so the
   // experience initializes and Lenis scroll unlocks (the splash is the only thing
   // that unlocks scroll). Runs always (embedded or direct), fast poll, no delay.
