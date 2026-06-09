@@ -40,8 +40,9 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
 #vshop-topnav button,#vshop-topnav a{pointer-events:auto;background:none;border:0;color:inherit;cursor:pointer;font-family:inherit}
 #vshop-menu-btn{font-size:14px;letter-spacing:1px;text-transform:uppercase;line-height:20px;padding:0}
 #vshop-icons{display:flex;gap:18px;align-items:center}
-/* Hide the Virrall Fashion (rhythm) chapter entirely + its hero/menu entries */
-#rhythm{display:none!important}
+#vshop-logo{pointer-events:auto;font-family:Georgia,"Times New Roman",serif;font-size:clamp(16px,1.8vw,20px);letter-spacing:clamp(3px,.4vw,5px);line-height:1;color:inherit;white-space:nowrap;flex:0 0 auto;text-align:center;font-weight:400}
+/* Hide the Virrall Fashion (rhythm) chapter + the editorial intro section ("[Intro]" / "THE INVISIBLE ECHO") */
+#rhythm,section.intro,.intro{display:none!important}
 .hero__index li[data-vf-hide],.chapters-menu li[data-vf-hide],.chapters-progress button[data-vf-hide]{display:none!important}
 #vshop-icons a{display:inline-flex;align-items:center}
 #vshop-icons svg{width:19px;height:19px;display:block}
@@ -532,6 +533,7 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
     // top nav bar
     var nav=document.createElement('div');nav.id='vshop-topnav';
     nav.innerHTML='<button id="vshop-menu-btn" aria-haspopup="true" aria-controls="vshop-overlay">MENU</button>'+
+      '<span id="vshop-logo">VIRRALL</span>'+
       '<div id="vshop-icons">'+
       '<a href="'+BASE+'/search" target="_top" aria-label="Search">'+SVG.search+'</a>'+
       '<a href="'+BASE+'/account" target="_top" aria-label="Account">'+SVG.user+'</a>'+
