@@ -35,6 +35,9 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
 .vshop-outro-card:hover img{transform:scale(1.06)}
 .vshop-outro-card__name{position:absolute;left:8px;right:8px;bottom:8px;font-size:10px;letter-spacing:.5px;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.65);line-height:1.3}
 .the-header__maker,.the-header__contacts{opacity:0!important;pointer-events:none!important}
+/* hide the big center VIRRALL wordmark (rendered by Vue after hydration as .the-header__logo);
+   our small sticky #vshop-logo replaces it */
+.the-header__center,.the-header__logo,.the-header__logo-wrap{display:none!important;opacity:0!important;pointer-events:none!important}
 #vshop-topnav{position:fixed;top:18px;left:0;right:0;z-index:2147483630;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3.2vw,40px);pointer-events:none;font-family:var(--font-mono,monospace);opacity:0;transition:opacity .5s ease;mix-blend-mode:difference;color:#fff}
 #vshop-topnav.-show{opacity:1}
 #vshop-topnav button,#vshop-topnav a{pointer-events:auto;background:none;border:0;color:inherit;cursor:pointer;font-family:inherit}
