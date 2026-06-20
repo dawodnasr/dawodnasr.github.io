@@ -260,6 +260,9 @@ html.page-transitioning,body.page-transitioning,html.scroll-lock,body.scroll-loc
     // a COLLECTION piece linked to a real product -> open that product (wins over all)
     var vp=e.target.closest&&e.target.closest('[data-vprod]');
     if(vp){ e.preventDefault(); e.stopPropagation(); (window.top||window).location.href=vp.getAttribute('data-vprod'); return; }
+    // MORE FROM product card -> open that product page (not the season collection)
+    var _card=e.target.closest&&e.target.closest('.vshop-outro-card');
+    if(_card&&_card.getAttribute('href')){ e.preventDefault(); e.stopPropagation(); (window.top||window).location.href=_card.getAttribute('href'); return; }
     // chapter imagery -> that season's collection
     var sec=e.target.closest&&e.target.closest('#pulse,#whisper,#resonance,#sub-noise');
     if(sec){
